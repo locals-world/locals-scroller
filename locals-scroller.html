@@ -147,7 +147,7 @@ Example:
 
       window.sr = ScrollReveal({distance: 0, origin: 'top', scale: 0.4, reset: true});
       var fooContainer = document.getElementById('fooContainer');
-      sr.reveal('.foo', { opacity: 1, viewFactor:0.1, duration: 300,
+      sr.reveal('.foo', { opacity: 1, easing: 'cubic-bezier(0.150, 0.450, 0.150, 0.735)', viewFactor:0.1, duration: 300,
             delay: 0, container: fooContainer, distance: 0, origin: 'top', scale: 0.8, reset: true });
     },
 

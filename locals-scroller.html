@@ -38,9 +38,10 @@ Example:
 
       .canvas {
         @apply(--layout-horizontal);
-        @apply(--layout-start-justified);
+        @apply(--layout-center-center);
         overflow-y: scroll;
         height: 100vh;
+        /*border: 1px solid green;*/
       }
 
       .object {
@@ -53,6 +54,10 @@ Example:
         top: 0;
         left: 0;
       }
+
+      locals-objectrender {
+        /*border: 1px solid red;*/
+      }
     </style>
     <iron-pages selected="{{page}}" id="pages">
       <section>
@@ -60,6 +65,8 @@ Example:
           <template is="dom-repeat" items="{{dataset}}">
             <locals-objectrender key="{{dataset.key}}" objectdata="{{item}}" class="foo"></locals-objectrender>
           </template>
+<!--           <locals-avatar class="foo"></locals-avatar>
+          <locals-avatar class="foo"></locals-avatar> -->
         </div>
       </section>
 
@@ -130,12 +137,12 @@ Example:
       // This is a good place to perform any work related to your element's
       // visual state or active behavior (measuring sizes, beginning animations,
       // loading resources, etc).
-      this.renderObjects(this.objects, this.startnum, this.endnum);
+      //this.renderObjects(this.objects, this.startnum, this.endnum);
 
       window.sr = ScrollReveal({distance: 0, origin: 'top', scale: 0.4, reset: true});
       var fooContainer = document.getElementById('fooContainer');
       sr.reveal('.foo', { opacity: 1, easing: 'cubic-bezier(0.150, 0.450, 0.150, 0.735)', viewFactor:0.1, duration: 300,
-            delay: 0, container: fooContainer, distance: 0, origin: 'top', scale: 0.8, reset: true });
+            delay: 0, container: fooContainer, distance: 0, origin: 'top', scale: 0.6, reset: true });
     },
 
     detached: function() {

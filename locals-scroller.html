@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../locals-avatar/locals-avatar.html">
+<link rel="import" href="../locals-objectrender/locals-objectrender.html">
 
 <!--
 The scroller! 
@@ -58,19 +59,16 @@ Example:
     <iron-pages selected="{{page}}" id="pages">
       <section>
         <div class="canvas" id="fooContainer">
-            <template is="dom-repeat" items="{{objects}}">
-              <locals-avatar class="foo"></locals-avatar>
-              <!-- <p class="object foo" 
-                  id="{{index}}" 
-                  on-tap="selectobject">{{item.name}}</p> -->
-            </template>
+          <template is="dom-repeat" items="{{dataset}}">
+            <locals-objectrender key="{{dataset.key}}" objectdata="{{item}}" class="foo"></locals-objectrender>
+          </template>
         </div>
       </section>
 
       <section>
         <div class="canvas">
           <p on-tap="back">x</p>
-          <h1 class="selectedobject"">{{selectedobject.name}}</h1>
+          <h1 class="selectedobject"">{{selectedobject.component.name}}</h1>
         </div>
       </section>
 
@@ -80,7 +78,7 @@ Example:
 
 </dom-module>
 
-<script src="https://cdn.jsdelivr.net/scrollreveal.js/3.1.4/scrollreveal.min.js"></script>
+<script src="//cdn.jsdelivr.net/scrollreveal.js/3.1.4/scrollreveal.min.js"></script>
 <script>
 
   Polymer({
@@ -94,16 +92,7 @@ Example:
       */
       objects: {
         type: Array,
-        value: [
-          {name: "skeleton", data: "skeletondata"},
-          {name: "house", data: "housedata"},
-          {name: "cat", data: "catdata"},
-          {name: "dog", data: "dogdata"},
-          {name: "skeleton", data: "skeletondata"},
-          {name: "house", data: "housedata"},
-          {name: "cat", data: "catdata"},
-          {name: "dog", data: "dogdata"},
-        ]
+        observer: '_objects'
       },
 
       /**
@@ -164,6 +153,12 @@ Example:
 
     },
 
+    _objects: function(){
+      this.dataset = this.object2array(this.objects);
+    },
+
+
+
     /**
      * The `object-selected` event is fired whenever `selectobject` is called.
      *
@@ -178,7 +173,7 @@ Example:
      */
     selectobject: function(e) {
       console.log(e.target.id);
-      this.selectedobject = this.objects[e.target.id];
+      this.selectedobject = this.dataset[e.target.id];
       console.log(this.selectedobject);
       //this.page = 1;
       this.fire('object-selected', {object: this.selectedobject});
@@ -186,6 +181,21 @@ Example:
 
     back: function(){
       this.page = 0;
+    },
+
+    object2array: function(input){
+      var newarray = [];
+      var p = input;
+      var previewdata = Object.keys(input);
+      //console.log('Object2array: ',previewdata);
+      for (var key in p) {        
+        if (p.hasOwnProperty(key)) {
+          newarray.key = key;
+          newarray.push(p[key]);
+          console.log(newarray);
+        }
+      };
+      return newarray;
     }
 
   });

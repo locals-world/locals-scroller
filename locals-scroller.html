@@ -32,7 +32,6 @@ Example:
       :host {
         display: block;
         width: 100vw;
-        height: 20%;
 /*        height: 100vh;*/
         color: white;
       }
@@ -40,9 +39,19 @@ Example:
       .canvas {
         @apply(--layout-horizontal);
         @apply(--layout-center-center);
-        overflow-y: scroll;
+        width: 100vw;
+        overflow-x: scroll;
       }
 
+      .object {
+        margin: 60px;
+        font-size: 40px;
+      }
+
+      /* DOES THIS WORK? */
+      ::-webkit-scrollbar { 
+          display: none; 
+      }
 
       .abs {
         position: absolute;

@@ -11,7 +11,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../locals-avatar/locals-avatar.html">
-<link rel="import" href="../locals-objectrender/locals-objectrender.html">
+<!-- <link rel="import" href="../locals-objectrender/locals-objectrender.html"> -->
+<link rel="import" href="../locals-objectdetail/locals-objectdetail.html">
+<link rel="import" href="../locals-objectcollection/locals-objectcollection.html">
+<link rel="import" href="../neon-animation/neon-animation.html">
 
 <!--
 The scroller! 
@@ -31,16 +34,27 @@ Example:
     <style>
       :host {
         display: block;
-        width: 100vw;
+        width: 100%;
 /*        height: 100vh;*/
         color: white;
+
       }
 
-      .canvas {
+      #fooContainer {
         @apply(--layout-horizontal);
-        @apply(--layout-center-center);
-        width: 100vw;
+        @apply(--layout-center);
+        width: 100%;
         overflow-x: scroll;
+        box-sizing: border-box;
+        padding-left: 10vw; 
+      }
+
+      #detailContainer {
+        width: 100vw;
+      }
+
+      #total {
+/*        background-color: red;*/
       }
 
       .object {
@@ -63,25 +77,25 @@ Example:
         /*border: 1px solid red;*/
       }
     </style>
-    <iron-pages selected="{{page}}" id="pages">
-      <section>
-        <div class="canvas" id="fooContainer">
+    <neon-animated-pages selected="{{page}}" id="pages">
+      <locals-objectcollection objects="{{objects}}" on-to-detail="gotoDetail"></locals-objectcollection>
+<!--         <div id="fooContainer">
           <template is="dom-repeat" items="{{dataset}}">
-            <locals-objectrender key="{{dataset.key}}" objectdata="{{item}}" class="foo"></locals-objectrender>
+            <div id="total">
+            <locals-objectrender on-tap="gotoDetail" key="{{dataset.key}}" objectdata="{{item}}" class="foo"></locals-objectrender>
+            </div>
           </template>
-<!--           <locals-avatar class="foo"></locals-avatar>
-          <locals-avatar class="foo"></locals-avatar> -->
-        </div>
-      </section>
+        </div> -->
 
-      <section>
-        <div class="canvas">
-          <p on-tap="back">x</p>
-          <h1 class="selectedobject"">{{selectedobject.component.name}}</h1>
+      <locals-objectdetail on-to-collection="gotoCollection"></locals-objectdetail>
+<!--        <div id="detailContainer">
+        <div id="total">
+        <p on-tap="back">x</p>
+        <h1 class="selectedobject">??<span>{{selectedobject.component.name}}</span></h1>
         </div>
-      </section>
+       </div> -->
 
-    </iron-pages>
+    </neon-animated-pages>
 
   </template>
 
@@ -93,7 +107,10 @@ Example:
   Polymer({
 
     is: 'locals-scroller',
-
+    behaviors: [
+    Polymer.NeonSharedElementAnimatableBehavior,
+    Polymer.NeonAnimatableBehavior
+    ],
     properties: {
 
       /**
@@ -143,10 +160,13 @@ Example:
       // loading resources, etc).
       //this.renderObjects(this.objects, this.startnum, this.endnum);
 
-      window.sr = ScrollReveal({distance: 0, origin: 'top', scale: 0.4, reset: true});
-      var fooContainer = document.getElementById('fooContainer');
-      sr.reveal('.foo', { opacity: 1, easing: 'cubic-bezier(0.150, 0.450, 0.150, 0.735)', viewFactor:0.1, duration: 300,
-            delay: 0, container: fooContainer, distance: 0, origin: 'top', scale: 0.6, reset: true });
+
+
+
+      // window.sr = ScrollReveal({distance: 0, origin: 'top', scale: 0.4, reset: true});
+      // var fooContainer = document.getElementById('fooContainer');
+      // sr.reveal('.foo', { opacity: 1, easing: 'cubic-bezier(0.150, 0.450, 0.150, 0.735)', viewFactor:0.1, duration: 300,
+      //       delay: 0, container: fooContainer, distance: 0, origin: 'top', scale: 0.6, reset: true });
     },
 
     detached: function() {
@@ -162,9 +182,9 @@ Example:
 
     },
 
-    _objects: function(){
-      this.dataset = this.object2array(this.objects);
-    },
+    // _objects: function(){
+    //   this.dataset = this.object2array(this.objects);
+    // },
 
 
 
@@ -180,31 +200,42 @@ Example:
     /**
      * When an object is selected, fire an event.
      */
-    selectobject: function(e) {
-      console.log(e.target.id);
-      this.selectedobject = this.dataset[e.target.id];
-      console.log(this.selectedobject);
-      //this.page = 1;
-      this.fire('object-selected', {object: this.selectedobject});
+    // selectobject: function(e) {
+    //   console.log(e.target.id);
+    //   this.selectedobject = this.dataset[e.target.id];
+    //   console.log(this.selectedobject);
+    //   //this.page = 1;
+    //   this.fire('object-selected', {object: this.selectedobject});
+    // },
+
+    // back: function(){
+    //   this.page = 0;
+    // },
+
+    // object2array: function(input){
+    //   var newarray = [];
+    //   var p = input;
+    //   var previewdata = Object.keys(input);
+    //   //console.log('Object2array: ',previewdata);
+    //   for (var key in p) {        
+    //     if (p.hasOwnProperty(key)) {
+    //       newarray.key = key;
+    //       newarray.push(p[key]);
+    //       console.log(newarray);
+    //     }
+    //   };
+    //   return newarray;
+    // },
+
+
+    gotoDetail: function(){
+      this.page = 1;
+      // console.log('gotoDetail!');
     },
 
-    back: function(){
+    gotoCollection: function(){
       this.page = 0;
-    },
-
-    object2array: function(input){
-      var newarray = [];
-      var p = input;
-      var previewdata = Object.keys(input);
-      //console.log('Object2array: ',previewdata);
-      for (var key in p) {        
-        if (p.hasOwnProperty(key)) {
-          newarray.key = key;
-          newarray.push(p[key]);
-          console.log(newarray);
-        }
-      };
-      return newarray;
+      // console.log('gotoCollection!');
     }
 
   });

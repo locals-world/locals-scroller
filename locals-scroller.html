@@ -10,9 +10,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
-<link rel="import" href="../locals-avatar/locals-avatar.html">
+<!-- <link rel="import" href="../locals-avatar/locals-avatar.html"> -->
 <!-- <link rel="import" href="../locals-objectrender/locals-objectrender.html"> -->
-<link rel="import" href="../locals-objectdetail/locals-objectdetail.html">
+
+
+<link rel="import" href="../locals-objectrender/locals-objectrender.html">
+
 <link rel="import" href="../locals-objectcollection/locals-objectcollection.html">
 <link rel="import" href="../neon-animation/neon-animation.html">
 
@@ -79,25 +82,14 @@ Example:
     </style>
     <neon-animated-pages selected="{{page}}" id="pages">
     <neon-animatable>
-<!--       <locals-objectcollection objects="{{objects}}" on-to-detail="gotoDetail"></locals-objectcollection>
- -->        <div id="fooContainer">
-          <template is="dom-repeat" items="{{dataset}}">
-            <div id="total">
-            <locals-objectrender on-tap="gotoDetail" key="{{dataset.key}}" objectdata="{{item}}" class="foo"></locals-objectrender>
-            </div>
-          </template>
-        </div>
+    
+      <locals-objectcollection objects="{{objects}}" on-to-detail="gotoDetail"></locals-objectcollection>
+      
     </neon-animatable>
     <neon-animatable>
 
-<!--       <locals-objectdetail on-to-collection="gotoCollection"></locals-objectdetail>
- -->
-        <div id="detailContainer">
-        <div id="total">
-        <p on-tap="back">x</p>
-        <h1 class="selectedobject">??<span>{{selectedobject.component.name}}</span></h1>
-        </div>
-       </div>
+      <locals-objectrender on-tap="gotoEdit" key="{{selecteditem.key}}" objectdata="{{selecteditem.data}}" class="foo"></locals-objectrender>
+
 </neon-animatable>
     </neon-animated-pages>
 
@@ -232,8 +224,9 @@ Example:
     },
 
 
-    gotoDetail: function(){
-      // this.page = 1;
+    gotoDetail: function(e){
+      this.selecteditem = e.detail;
+      this.page = 1;
       // console.log('gotoDetail!');
     },
 

@@ -76,21 +76,25 @@ Example:
         left: 0;
       }
 
+/*      .objectrender {
+        @apply(--layout-fit);
+      }*/
+
       locals-objectrender {
         /*border: 1px solid red;*/
       }
     </style>
     <neon-animated-pages selected="{{page}}" id="pages">
-    <neon-animatable>
+<!--     <neon-animatable> -->
     
       <locals-objectcollection objects="{{objects}}" on-to-detail="gotoDetail"></locals-objectcollection>
       
-    </neon-animatable>
-    <neon-animatable>
+<!--     </neon-animatable>
+    <neon-animatable> -->
 
-      <locals-objectrender on-tap="gotoEdit" key="{{selecteditem.key}}" objectdata="{{selecteditem.data}}" class="foo"></locals-objectrender>
+      <locals-objectrender on-tap="gotoEdit" key="{{selecteditem.key}}" objectdata="{{selecteditem.data}}" class="objectrender"></locals-objectrender>
 
-</neon-animatable>
+<!-- </neon-animatable> -->
     </neon-animated-pages>
 
   </template>

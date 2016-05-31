@@ -9,15 +9,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../iron-pages/iron-pages.html">
+<!-- <link rel="import" href="../iron-pages/iron-pages.html"> -->
 <!-- <link rel="import" href="../locals-avatar/locals-avatar.html"> -->
 <!-- <link rel="import" href="../locals-objectrender/locals-objectrender.html"> -->
-
-
+<!-- <link rel="import" href="../locals-objectcollection/locals-objectcollection.html"> -->
+<!-- <link rel="import" href="../neon-animation/neon-animation.html"> -->
 <link rel="import" href="../locals-objectrender/locals-objectrender.html">
 
-<link rel="import" href="../locals-objectcollection/locals-objectcollection.html">
-<link rel="import" href="../neon-animation/neon-animation.html">
 
 <!--
 The scroller! 
@@ -80,22 +78,29 @@ Example:
         @apply(--layout-fit);
       }*/
 
+      .test {
+        background-color: red;
+        width: 100px;
+        height: 100px;
+      }
+
       locals-objectrender {
         /*border: 1px solid red;*/
       }
     </style>
-    <neon-animated-pages selected="{{page}}" id="pages">
-<!--     <neon-animatable> -->
-    
+      <div id="fooContainer">
+          <template is="dom-repeat" items="{{dataset}}">
+            <div id="total">
+<!--             <div class="test" on-tap="gotoDetail"></div> -->
+            <locals-objectrender on-detail-tapped="gotoDetail" key="{{dataset.key}}" objectdata="{{item}}" class="foo"></locals-objectrender>
+            </div>
+          </template>
+      </div>
+
+<!--     <neon-animated-pages selected="{{page}}" id="pages">
       <locals-objectcollection objects="{{objects}}" on-to-detail="gotoDetail"></locals-objectcollection>
-      
-<!--     </neon-animatable>
-    <neon-animatable> -->
-
       <locals-objectrender on-tap="gotoEdit" key="{{selecteditem.key}}" objectdata="{{selecteditem.data}}" class="objectrender"></locals-objectrender>
-
-<!-- </neon-animatable> -->
-    </neon-animated-pages>
+    </neon-animated-pages> -->
 
   </template>
 
@@ -120,6 +125,11 @@ Example:
         type: Array,
         observer: '_objects'
       },
+
+      route: {
+        type: String,
+        notify: true  
+        },
 
       /**
       * Start rendering objects as from:
@@ -151,32 +161,26 @@ Example:
       // necessary), or kick off any processes the element wants to perform.
     },
 
-    attached: function() {
-      // `attached` fires once the element and its parents have been inserted
-      // into a document.
-      //
-      // This is a good place to perform any work related to your element's
-      // visual state or active behavior (measuring sizes, beginning animations,
-      // loading resources, etc).
-      //this.renderObjects(this.objects, this.startnum, this.endnum);
+     attached: function() {
+      window.sr = ScrollReveal({distance: 0, origin: 'top', scale: 0.4, reset: true});
+      var fooContainer = document.getElementById('fooContainer');
+      sr.reveal('.foo', { opacity: 1, easing: 'cubic-bezier(0.150, 0.450, 0.150, 0.735)', viewFactor:0.1, duration: 300,
+            delay: 0, container: fooContainer, distance: 0, origin: 'top', scale: 0.6, reset: true });
+      },
 
+      detached: function() {
+ 
+      },
 
+      
 
+      gotoDetail: function(e){
+        console.log('this if from gotoDetail in scroller:', e.detail);
+        // this.fire('to-detail', e.detail);
+        console.log('Ich hem geklikt gehad');
+        this.route = "objectdetail";
+      },
 
-      // window.sr = ScrollReveal({distance: 0, origin: 'top', scale: 0.4, reset: true});
-      // var fooContainer = document.getElementById('fooContainer');
-      // sr.reveal('.foo', { opacity: 1, easing: 'cubic-bezier(0.150, 0.450, 0.150, 0.735)', viewFactor:0.1, duration: 300,
-      //       delay: 0, container: fooContainer, distance: 0, origin: 'top', scale: 0.6, reset: true });
-    },
-
-    detached: function() {
-      // The analog to `attached`, `detached` fires when the element has been
-      // removed from a document.
-      //
-      // Use this to clean up anything you did in `attached`.
-    },
-
-    // Element Behavior
 
     renderObjects: function(objects, start, end){
 
@@ -185,21 +189,6 @@ Example:
     _objects: function(){
       this.dataset = this.object2array(this.objects);
     },
-
-
-
-    /**
-     * The `object-selected` event is fired whenever `selectobject` is called.
-     *
-     * @event object-selected
-     * @detail {{object: Number}}
-     */
-
-    
-
-    /**
-     * When an object is selected, fire an event.
-     */
     selectobject: function(e) {
       console.log(e.target.id);
       this.selectedobject = this.dataset[e.target.id];
@@ -225,19 +214,8 @@ Example:
         }
       };
       return newarray;
-    },
-
-
-    gotoDetail: function(e){
-      this.selecteditem = e.detail;
-      this.page = 1;
-      // console.log('gotoDetail!');
-    },
-
-    gotoCollection: function(){
-      // this.page = 0;
-      // console.log('gotoCollection!');
     }
+
 
   });
 

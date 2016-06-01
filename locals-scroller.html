@@ -92,7 +92,7 @@ Example:
           <template is="dom-repeat" items="{{dataset}}">
             <div id="total">
 <!--             <div class="test" on-tap="gotoDetail"></div> -->
-            <locals-objectrender on-detail-tapped="gotoDetail" key="{{dataset.key}}" objectdata="{{item}}" class="foo"></locals-objectrender>
+            <locals-objectrender on-detail-tapped="gotoDetail" key="{{dataset.key}}" objectdata="{{item}}" state="closed" class="foo"></locals-objectrender>
             </div>
           </template>
       </div>
@@ -178,7 +178,8 @@ Example:
         console.log('this if from gotoDetail in scroller:', e.detail);
         // this.fire('to-detail', e.detail);
         console.log('Ich hem geklikt gehad');
-        this.route = "objectdetail";
+        //this.route = "/objectdetail";
+        this.fire('object-selected', {object: e.detail});
       },
 
 

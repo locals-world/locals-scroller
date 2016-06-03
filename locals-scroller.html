@@ -74,9 +74,6 @@ Example:
         left: 0;
       }
 
-/*      .objectrender {
-        @apply(--layout-fit);
-      }*/
 
       .test {
         background-color: red;
@@ -84,15 +81,11 @@ Example:
         height: 100px;
       }
 
-      locals-objectrender {
-        /*border: 1px solid red;*/
-      }
     </style>
       <div id="fooContainer">
           <template is="dom-repeat" items="{{dataset}}">
             <div id="total">
-<!--             <div class="test" on-tap="gotoDetail"></div> -->
-            <locals-objectrender on-detail-tapped="gotoDetail" key="{{dataset.key}}" objectdata="{{item}}" state="closed" class="foo"></locals-objectrender>
+            <locals-objectrender on-detail-tapped="gotoDetail" key="{{dataset.key}}" objectdata="{{item}}" renderstate="closed" class="foo"></locals-objectrender>
             </div>
           </template>
       </div>
@@ -151,14 +144,6 @@ Example:
     // Element Lifecycle
 
     ready: function() {
-      this.page = 0;
-
-      // `ready` is called after all elements have been configured, but
-      // propagates bottom-up. This element's children are ready, but parents
-      // are not.
-      //
-      // This is the point where you should make modifications to the DOM (when
-      // necessary), or kick off any processes the element wants to perform.
     },
 
      attached: function() {
@@ -175,43 +160,36 @@ Example:
       
 
       gotoDetail: function(e){
-        console.log('this if from gotoDetail in scroller:', e.detail);
         // this.fire('to-detail', e.detail);
-        console.log('Ich hem geklikt gehad');
         //this.route = "/objectdetail";
         this.fire('object-selected', {object: e.detail});
       },
 
 
-    renderObjects: function(objects, start, end){
+    // renderObjects: function(objects, start, end){
 
-    },
+    // },
 
     _objects: function(){
       this.dataset = this.object2array(this.objects);
     },
     selectobject: function(e) {
-      console.log(e.target.id);
       this.selectedobject = this.dataset[e.target.id];
-      console.log(this.selectedobject);
-      //this.page = 1;
       this.fire('object-selected', {object: this.selectedobject});
     },
 
-    back: function(){
-      this.page = 0;
-    },
+    // back: function(){
+    //   this.page = 0;
+    // },
 
     object2array: function(input){
       var newarray = [];
       var p = input;
       var previewdata = Object.keys(input);
-      //console.log('Object2array: ',previewdata);
       for (var key in p) {        
         if (p.hasOwnProperty(key)) {
           newarray.key = key;
           newarray.push(p[key]);
-          console.log(newarray);
         }
       };
       return newarray;
